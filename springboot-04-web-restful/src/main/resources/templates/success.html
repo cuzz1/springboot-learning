@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>成功！</h1>
+<!--th:text 将div里面的文本内容设置为 -->
+<div id="div01" class="myDiv" th:id="${hello}" th:class="${hello}" th:text="${hello}">这是显示欢迎信息</div>
+<hr/>
+<div th:text="${hello}"></div>
+<div th:utext="${hello}"></div>
+<hr/>
+
+<!-- th:each每次遍历都会生成当前这个标签： 3个h4 -->a
+<h4 th:text="${user}"  th:each="user:${users}"></h4>
+<hr/>
+<h4>
+    <span th:each="user:${users}"> [[${user}]] </span>
+</h4>
+<form th:action="@{/upload}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit"/>
+</form>
+
+</body>
+</html>
