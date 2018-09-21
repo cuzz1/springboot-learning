@@ -136,7 +136,7 @@ public class HelloController {
 
 
 
-![1537439192685](images\1537439192685.png)
+![1537439192685](/images/1537439192685.png)
 
 
 
@@ -527,7 +527,7 @@ public class Person {
 
 出现以下提示，进入官网，在pom中导入配置
 
-![1537443412214](images\1537443412214.png)
+![1537443412214](images/1537443412214.png)
 
 我们可以导入配置文件处理器，以后编写配置就有提示了
 
@@ -2036,11 +2036,11 @@ i18n = internationalization（国际化）的缩写，首位的i和末尾的n之
 
 new -> add properties file to resource bundle 要先新建一个properties文件，xxx_en_US.properties语言和国家
 
-![1537515512779](images\1537515512779.png)
+![1537515512779](images/1537515512779.png)
 
 1）、编写国际化配置文件，抽取页面需要显示的国际化消息
 
-![1537515666575](images\1537515666575.png)
+![1537515666575](images/1537515666575.png)
 
 ![](images/搜狗截图20180211130721.png)
 
@@ -3215,7 +3215,7 @@ EmbeddedServletContainerFactory containerFactory = getEmbeddedServletContainerFa
 
 **先启动嵌入式的Servlet容器，再将ioc容器中剩下没有创建出的对象获取出来；**
 
-**==IOC容器启动创建嵌入式的Servlet容器==**
+**IOC容器启动创建嵌入式的Servlet容器**
 
 
 
