@@ -130,7 +130,7 @@ public class HelloController {
 
 
 
-![1537439192685](E:/markdown/springboot/images/1537439192685.png)
+![1537439192685](/images/1537439192685.png)
 
 
 
@@ -314,7 +314,7 @@ public @interface EnableAutoConfiguration {
 
   - EnableAutoConfigurationImportSelector：导入哪些组件的选择器；
   - 将所有需要导入的组件以全类名的方式返回，这些组件就会被添加到容器中；
-    会给容器中导入非常多的自动配置类（xxxAutoConfiguration），就是给容器中导入这个场景需要的所有组件，并配置好这些组件；		![自动配置类](E:/markdown/springboot/images/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE20180129224104.png)
+    会给容器中导入非常多的自动配置类（xxxAutoConfiguration），就是给容器中导入这个场景需要的所有组件，并配置好这些组件；		![自动配置类](/images/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE20180129224104.png)
 
 - 有了自动配置类，免去了我们手动编写配置注入功能组件等的工作；
 
@@ -528,7 +528,7 @@ public class Person {
 
 出现以下提示，进入官网，在pom中导入配置
 
-![1537443412214](E:/markdown/springboot/images/1537443412214.png)
+![1537443412214](/images/1537443412214.png)
 
 我们可以导入配置文件处理器，以后编写配置就有提示了
 
@@ -545,7 +545,7 @@ public class Person {
 
 调整
 
-![idea配置乱码](E:/markdown/springboot/images/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE20180130161620.png)
+![idea配置乱码](/images/%E6%90%9C%E7%8B%97%E6%88%AA%E5%9B%BE20180130161620.png)
 
 #### 2、@Value获取值和@ConfigurationProperties获取值比较
 
