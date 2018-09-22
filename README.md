@@ -3618,7 +3618,7 @@ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:tag --
 ## 1、JDBC
 
 ```xml
-<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
@@ -3878,14 +3878,43 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 3）、基本的配置JpaProperties
 
 ```yaml
-spring:  
- jpa:
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/jpa
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
     hibernate:
-#     更新或者创建数据表结构
+      # 更新或者创建数据表结构
       ddl-auto: update
-#    控制台显示SQL
+      # 控制台显示SQL
     show-sql: true
 ```
+
+4）、controller
+
+````jAVA
+@RestController
+public class UserController {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @GetMapping("/user/{id}")
+    public User getUser(@PathVariable("id") Integer id) {
+        // 用2.0这快会报错 换1.5就好了
+        User user = userRepository.findOne(id);
+        return null;
+    }
+
+    @GetMapping("/user")
+    public User insertUser(User user) {
+        User save = userRepository.save(user);
+        return save;
+    }
+}
+````
 
 
 
