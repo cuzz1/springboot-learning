@@ -4,6 +4,10 @@ typora-root-url: ./
 
 
 
+[TOC]
+
+
+
 # 一、Spring Boot 入门
 
 ## 1、Spring Boot 简介
@@ -542,13 +546,13 @@ public class Person {
 		</dependency>
 ```
 
-#### 1、properties配置文件在idea中默认utf-8可能会乱码
+### 1、properties配置文件在idea中默认utf-8可能会乱码
 
 调整
 
 ![idea配置乱码](images/搜狗截图20180130161620.png)
 
-#### 2、@Value获取值和@ConfigurationProperties获取值比较
+### 2、@Value获取值和@ConfigurationProperties获取值比较
 
 |            | @ConfigurationProperties | @Value |
 | ---------- | ------------------------ | ------ |
@@ -570,7 +574,7 @@ public class Person {
 
 
 
-#### 3、配置文件注入值数据校验
+### 3、配置文件注入值数据校验
 
 ```java
 @Component
@@ -604,7 +608,7 @@ public class Person {
 
 
 
-#### 4、@PropertySource&@ImportResource&@Bean
+### 4、@PropertySource&@ImportResource&@Bean
 
 @**PropertySource**：加载指定的配置文件；
 
@@ -3444,7 +3448,7 @@ docker容器(Container)：镜像启动后的实例称为一个容器；容器是
 
 ## 3、安装Docker
 
-#### 1）、安装linux虚拟机
+### 1）、安装linux虚拟机
 
 ​	1）、VMWare、VirtualBox（安装）；
 
@@ -3472,7 +3476,7 @@ ip addr
 
 ​	8）、使用客户端连接linux；
 
-#### 2）、在linux虚拟机上安装docker
+### 2）、在linux虚拟机上安装docker
 
 步骤： 
 
@@ -3888,7 +3892,7 @@ spring:
     hibernate:
       # 更新或者创建数据表结构
       ddl-auto: update
-      # 控制台显示SQL
+    # 控制台显示SQL
     show-sql: true
 ```
 
