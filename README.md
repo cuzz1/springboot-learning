@@ -1,6 +1,8 @@
 ---
-typora-copy-images-to: images
+typora-root-url: ./
 ---
+
+
 
 # 一、Spring Boot 入门
 
@@ -3235,6 +3237,20 @@ EmbeddedServletContainerFactory containerFactory = getEmbeddedServletContainerFa
 
 1）、必须创建一个war项目；（利用idea创建好目录结构）
 
+- new project or new module
+
+![1537583437482](images/1537583437482.png)
+
+- create
+
+  ![1537583796091](/images/1537583796091.png)
+
+- web.xml
+
+  ![1537584525195](/images/1537584525195.png)
+
+- 添加外部tomcat启动
+
 2）、将嵌入式的Tomcat指定为provided；
 
 ```xml
@@ -3269,7 +3285,7 @@ war包：启动服务器，**服务器启动SpringBoot应用**【SpringBootServl
 
 
 
-servlet3.0（Spring注解版）：
+servlet3.0（Spring注解版）： 
 
 8.2.4 Shared libraries / runtimes pluggability：
 
@@ -3382,7 +3398,7 @@ public ConfigurableApplicationContext run(String... args) {
 }
 ```
 
-**==启动Servlet容器，再启动SpringBoot应用==**
+**启动Servlet容器，再启动SpringBoot应用**
 
 
 
