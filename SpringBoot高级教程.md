@@ -536,7 +536,7 @@ spring.redis.host=192.168.179.131
     RedisTemplate redisTemplate;//操作k-v都是对象    
 	@Test
     public void test01(){
-//        stringRedisTemplate.opsForValue().append("msg", "hello");
+        // stringRedisTemplate.opsForValue().append("msg", "hello");
         String msg = stringRedisTemplate.opsForValue().get("msg");
         System.out.println(msg);
     }
@@ -581,6 +581,11 @@ public  void test02(){
 1、新建一个Redis的配置类MyRedisConfig,
 
 ```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/26 23:50
+ * @Description:
+ */
 @Configuration
 public class MyRedisConfig {
     @Bean
@@ -593,6 +598,7 @@ public class MyRedisConfig {
         template.setDefaultSerializer(jsonRedisSerializer);
         return template;
     }
+}
 ```
 
 2、编写测试类
@@ -611,6 +617,123 @@ public  void test02(){
 3、测试效果
 
 ![39.redis04](/images2/39.redis04.jpg)
+
+#### 5、整合redis作为缓存
+
+使用缓存时，默认使用的是ConcurrentMapCache，将数据保存在ConcurrentMap中，开发中使用的是缓存中间件，redis、memcached、ehcache等
+
+starter启动时，有顺序，redis优先级比ConcurrentMapCache更高，CacheManager变为RedisCacheManager，所以使用的是redis缓存
+
+传入的是RedisTemplate<Object, Object>
+
+默认使用的是jdk的序列化保存
+
+![1537977987703](/images2/1537977987703.png)
+
+我们可以自定义CacheManager
+
+编写一个配置类
+
+```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/26 23:50
+ * @Description:
+ */
+@Configuration
+public class MyRedisConfig {
+    @Bean
+    public RedisTemplate<Object, Employee> empRedisTemplate(
+            RedisConnectionFactory redisConnectionFactory)
+            throws UnknownHostException {
+        RedisTemplate<Object, Employee> template = new RedisTemplate<Object, Employee>();
+        template.setConnectionFactory(redisConnectionFactory);
+        Jackson2JsonRedisSerializer<Employee> jsonRedisSerializer = new Jackson2JsonRedisSerializer<Employee>(Employee.class);
+        template.setDefaultSerializer(jsonRedisSerializer);
+        return template;
+    }
+
+    @Bean
+    public RedisCacheManager employeeCacheManager(RedisTemplate<Object, Employee> empRedisTemplate) {
+        RedisCacheManager cacheManager = new RedisCacheManager(empRedisTemplate);
+        // 使用前缀，默认将CacheName作为前缀
+        cacheManager.setUsePrefix(true);
+        return cacheManager;
+    }
+}
+```
+
+可以看出变为json格式了
+
+![1537978866933](/images2/1537978866933.png)
+
+empRedisTemplate只能用来反序列化Employee，而不能反序列化Department对象，因此要创建不同的xxxRedisTemplate
+
+分别创建Manager
+
+```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/26 23:50
+ * @Description:
+ */
+@Configuration
+public class MyRedisConfig {
+    // Employee
+    @Bean
+    public RedisTemplate<Object, Employee> empRedisTemplate(
+            RedisConnectionFactory redisConnectionFactory)
+            throws UnknownHostException {
+        RedisTemplate<Object, Employee> template = new RedisTemplate<Object, Employee>();
+        template.setConnectionFactory(redisConnectionFactory);
+        Jackson2JsonRedisSerializer<Employee> jsonRedisSerializer = new Jackson2JsonRedisSerializer<Employee>(Employee.class);
+        template.setDefaultSerializer(jsonRedisSerializer);
+        return template;
+    }
+    // Employee
+    @Primary  // 有多个cacheManager需要制定一个默认的一般将jdk的cacheManager作为默认
+    @Bean
+    public RedisCacheManager employeeCacheManager(RedisTemplate<Object, Employee> empRedisTemplate) {
+        RedisCacheManager cacheManager = new RedisCacheManager(empRedisTemplate);
+        cacheManager.setUsePrefix(true);
+        return cacheManager;
+    }
+
+    // Department
+    @Bean
+    public RedisTemplate<Object, Department> deptRedisTemplate(
+            RedisConnectionFactory redisConnectionFactory)
+            throws UnknownHostException {
+        RedisTemplate<Object, Department> template = new RedisTemplate<Object, Department>();
+        template.setConnectionFactory(redisConnectionFactory);
+        Jackson2JsonRedisSerializer<Department> jsonRedisSerializer = new Jackson2JsonRedisSerializer<Department>(Department.class);
+        template.setDefaultSerializer(jsonRedisSerializer);
+        return template;
+    }
+    
+    // Department
+    @Bean
+    public RedisCacheManager departmentCacheManager(RedisTemplate<Object, Department> deptRedisTemplate) {
+        RedisCacheManager cacheManager = new RedisCacheManager(deptRedisTemplate);
+        cacheManager.setUsePrefix(true);
+        return cacheManager;
+    }
+
+}
+```
+
+指定CacheManager
+
+```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/26 16:08
+ * @Description:
+ */
+@CacheConfig(cacheNames = "emp", cacheManager = "employeeCacheManager")
+@Service
+public class EmployeeService {}
+```
 
 
 

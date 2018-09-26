@@ -13,14 +13,15 @@ import javax.sound.midi.Soundbank;
  * @Date: 2018/9/26 16:08
  * @Description:
  */
-//@CacheConfig(cacheNames = "emp")
+@CacheConfig(cacheNames = "emp", cacheManager = "employeeCacheManager")
 @Service
 public class EmployeeService {
 
     @Autowired
     EmployeeMapper employeeMapper;
 
-    @Cacheable(cacheNames = "emp", keyGenerator = "myKeyGenerator")
+//    @Cacheable(cacheNames = "emp", keyGenerator = "myKeyGenerator")
+    @Cacheable(cacheNames = "emp")
     public Employee getEmployee(Integer id) {
         System.out.println("----> 查询" + id + "号员工");
         return employeeMapper.getEmployeeById(id);
