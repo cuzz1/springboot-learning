@@ -1,15 +1,16 @@
-package com.cuzz.springboot;
+package com.cuzz.cache;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
-@MapperScan(value = "com.cuzz.springboot.mapper")
+@MapperScan("com.cuzz.cache.mapper")
 @SpringBootApplication
-public class SpringbootApplication {
+@EnableCaching
+public class Springboot07CacheApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringbootApplication.class, args);
+		SpringApplication.run(Springboot07CacheApplication.class, args);
 	}
 }
