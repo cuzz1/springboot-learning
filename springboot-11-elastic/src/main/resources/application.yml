@@ -1,0 +1,5 @@
+spring:
+  elasticsearch:
+    jest:
+      uris: http://10.138.223.126:9200
+

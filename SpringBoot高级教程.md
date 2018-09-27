@@ -1,5 +1,5 @@
 ---
-typora-root-url: ./
+
 ---
 
 # SpringBoot的高级教程
@@ -1236,29 +1236,25 @@ docker pull registry.docker-cn.com/library/elasticsearch
 
 4、运行ElasticSearch
 
-> -e ES_JAVA_OPTS="-Xms256m -Xmx256m" 表示占用的最大内存为256m,默认是2G
+> -e ES_JAVA_OPTS="-Xms256m -Xmx256m" 表示占用的最大内存为256m，默认是2G
 
 ```shell
-[root@node1 ~]# docker images
-REPOSITORY                                     TAG                 IMAGE ID                                                                   CREATED             SIZE
-registry.docker-cn.com/library/elasticsearch   latest              671bb2d7da44                                                               32 hours ago        486 MB
-[root@node1 ~]#
-[root@node1 ~]# docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9200:9200 -p 9300:9300 --name ES01 671bb2d7da44
+[root@node1 ~]# docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9200:9200 -p 9300:9300 --name ES01 5acf0e8da90b
 ```
 
 5、测试是否启动成功
 
-访问9200端口：http://192.168.179.131:9200/  查看是否返回json数据
+访问9200端口：http://10.138.223.126:9200/ 查看是否返回json数据
 
 ```json
 {
-  "name" : "onB-EUU",
+  "name" : "DNF7ndJ",
   "cluster_name" : "elasticsearch",
-  "cluster_uuid" : "j3SXX6tdThWUomW3tAvDFg",
+  "cluster_uuid" : "t-JMNI1LRgGf62ctJqiGYQ",
   "version" : {
-    "number" : "5.6.9",
-    "build_hash" : "877a590",
-    "build_date" : "2018-04-12T16:25:14.838Z",
+    "number" : "5.6.12",
+    "build_hash" : "cfe3d9f",
+    "build_date" : "2018-09-10T20:12:43.732Z",
     "build_snapshot" : false,
     "lucene_version" : "6.6.1"
   },
@@ -1268,7 +1264,7 @@ registry.docker-cn.com/library/elasticsearch   latest              671bb2d7da44 
 
 ### 3、Elastic的快速入门
 
-> 最好的工具就是[官方文档](https://www.elastic.co/guide/cn/elasticsearch/guide/current/getting-started.html)，以下操作都在文档中进行操作。
+> 最好的工具就是[官方文档](https://www.elastic.co/guide/cn/elasticsearch/guide/current/index.html)，以下操作都在文档中进行操作。
 
 #### 1、基础概念
 
@@ -1287,6 +1283,10 @@ registry.docker-cn.com/library/elasticsearch   latest              671bb2d7da44 
 **文档**：相当于数据库中的行，即每条数据都叫一个文档
 
 **属性**：相当于数据库中的列，即文档的属性
+
+**结构图**：
+
+![1538037936258](/images2/1538037936258.png)
 
 #### 2、测试
 
@@ -1309,7 +1309,7 @@ PUT /megacorp/employee/1
 }
 ```
 
-![01.postman](/images2/01.postman.jpg)
+![01.postman](/images2/1538038492112.png)
 
 ##### 2、检索文档
 
@@ -1321,7 +1321,7 @@ PUT /megacorp/employee/1
 GET /megacorp/employee/1
 ```
 
-![02.postmanget](/images2/02.postmanget.jpg)
+![02.postmanget](/images2/1538038658381.png)
 
 ##### 3、轻量检索
 
@@ -1720,18 +1720,15 @@ GET /megacorp/employee/_search
 1、注释SpringDataElasticSearch的依赖，并导入Jest【5.xx】的相关依赖
 
 ```xml
-        <!--   SpringData管理ElasticSearch   -->
-<!--        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/io.searchbox/jest -->
-        <dependency>
-            <groupId>io.searchbox</groupId>
-            <artifactId>jest</artifactId>
-            <version>5.3.3</version>
-        </dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
+		<!--</dependency>-->
+		<dependency>
+			<groupId>io.searchbox</groupId>
+			<artifactId>jest</artifactId>
+			<version>5.3.3</version>
+		</dependency>
 ```
 
 2、修改配置文件application.yml
@@ -1740,7 +1737,7 @@ GET /megacorp/employee/_search
 spring:
   elasticsearch:
     jest:
-      uris: http://192.168.179.131:9200
+      uris: http://10.138.223.126:9200
 ```
 
 3、创建 bean.Article
@@ -1799,19 +1796,16 @@ public class Article {
 > 向wdjr-article中插入数据
 
 ```java
-@Autowired
-JestClient jestClient;
-
 @Test
 public void contextLoads() {
-    //1、给Es中索引（保存）一个文档
+    // 给Es中索引（保存）一个文档
     Article article = new Article();
-    article.setId(2);
-    article.setTitle("好消息");
-    article.setAutor("zhangsan");
+    article.setId(1);
+    article.setTitle("Effect Java");
+    article.setAutor("Joshua Bloch");
     article.setContent("Hello World");
-    //构建一个索引功能
-    Index index = new Index.Builder(article).index("wdjr").type("article").build();
+    // 构建一个索引功能
+    Index index = new Index.Builder(article).index("cuzz").type("article").build();
 
     try {
         //执行
@@ -1819,34 +1813,34 @@ public void contextLoads() {
     } catch (IOException e) {
         e.printStackTrace();
     }
-
 }
 ```
+
+![1538043139689](/images2/1538043139689.png)
 
 > 查询数据
 
 ```java
 @Test
 public void search(){
-    //查询表达式
+    // 查询表达式
     String json = "{\n" +
-            "    \"query\" : {\n" +
-            "        \"match\" : {\n" +
-            "            \"content\" : \"Hello\"\n" +
-            "        }\n" +
-            "    }\n" +
-            "}";
-    //构建搜索操作
-    Search search = new Search.Builder(json).addIndex("wdjr").addType("article").build();
+        "    \"query\" : {\n" +
+        "        \"match\" : {\n" +
+        "            \"content\" : \"Hello\"\n" +
+        "        }\n" +
+        "    }\n" +
+        "}";
+    // 构建搜索操作
+    Search search = new Search.Builder(json).addIndex("cuzz").addType("article").build();
 
-    //执行
+    // 执行
     try {
         SearchResult result = jestClient.execute(search);
         System.out.println(result.getJsonString());
     } catch (IOException e) {
         e.printStackTrace();
     }
-
 }
 ```
 
@@ -1870,7 +1864,7 @@ public void search(){
 
 ```shell
 docker pull elasticsearch:2.4.6
-docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9201:9200 -p 9301:9300 --name ES02 elasticsearch:2.4.6
+docker run -e ES_JAVA_OPTS="-Xms256m -Xmx256m" -d -p 9201:9200 -p 9301:9300 --name ES02 id
 ```
 
 3、编写配置文件
@@ -1880,10 +1874,19 @@ spring:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 192.168.179.131:9301
+      cluster-nodes: 10.138.223.126:9301
 ```
 
-4、运行主程序
+4、修改pom文件，把使用data-elasticsearch，把刚才注释删除
+
+```xml
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+		</dependency>
+```
+
+
 
 5、操作ElasticSearch有两种方式
 
@@ -1893,12 +1896,17 @@ spring:
 
 6、ElasticsearchRepositry的操作
 
-1）、新建一个bean/Book类
+1）、新建一个bean/Book类，**注意：**@Document(indexName = "cuzz", type="book")
 
 ```java
-@Document(indexName = "wdjr",type="book")
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/27 18:32
+ * @Description:
+ */
+@Document(indexName = "cuzz",type="book")
+@Data
 public class Book {
-
     private Integer id;
     private String bookName;
     private String auto;
@@ -1914,47 +1922,21 @@ public class Book {
         this.bookName = bookName;
         this.auto = auto;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getBookName() {
-        return bookName;
-    }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
-
-    public String getAuto() {
-        return auto;
-    }
-
-    public void setAuto(String auto) {
-        this.auto = auto;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", bookName='" + bookName + '\'' +
-                ", auto='" + auto + '\'' +
-                '}';
-    }
 }
 ```
 
 2）、新建一个repositry/BookRepositry
 
+方法编写参考[官方文档](https://docs.spring.io/spring-data/elasticsearch/docs/3.1.0.RELEASE/reference/html/#elasticsearch.repositories)
+
 ```java
-public interface BookRepositry extends ElasticsearchRepository<Book,Integer> {
-	//自定义查询方法
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/27 18:33
+ * @Description:
+ */
+public interface BookRepository extends ElasticsearchRepository<Book, Integer> {
+    //自定义查询方法
     public List<Book> findByBookNameLike(String bookName);
 }
 ```
@@ -1966,10 +1948,9 @@ public interface BookRepositry extends ElasticsearchRepository<Book,Integer> {
 BookRepositry bookRepositry;
 @Test
 public void testSearch(){
-    for (Book book : bookRepositry.findByBookNameLike("金")) {
+    for (Book book : bookRepositry.findByBookNameLike("Effect")) {
         System.out.println(book);
     }
-
 }
 ```
 
