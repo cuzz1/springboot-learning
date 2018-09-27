@@ -4,7 +4,7 @@ typora-root-url: ./
 
 # SpringBoot的高级教程
 
-## 一、SpringBoot缓存
+## 九、SpringBoot缓存
 
 缓存的场景
 
@@ -737,7 +737,7 @@ public class EmployeeService {}
 
 
 
-## 二、SpringBoot的消息中间件
+## 十、SpringBoot的消息中间件
 
 ### 1、JMS&AMQP简介
 
@@ -745,15 +745,15 @@ public class EmployeeService {}
 
 同步机制
 
-![09.同步](/images2/09.同步.png)
+![1538014904085](/images2/1538014904085.png)
 
 并发机制
 
-![10.异步](/images2/10.异步.png)
+![1538014945402](/images2/1538014945402.png)
 
 消息队列机制
 
-![11.消息](/images2/11.消息.png)
+![1538014962349](/images2/1538014962349.png)
 
 
 
@@ -761,9 +761,13 @@ public class EmployeeService {}
 
 使用中间件，将两个服务解耦，一个写入，一个订阅
 
+![1538015017658](/images2/1538015017658.png)
+
 3、流量削锋
 
 例如消息队列的FIFO，限定元素的长度，防止出现多次请求导致的误操作
+
+![1538015030893](/images2/1538015030893.png)
 
 #### 概述
 
@@ -771,7 +775,7 @@ public class EmployeeService {}
 
 2、消息服务中的两个重要概念：
 
-消息代理（message broker）和目的地（destination）,当消息发送者发送消息以后，将由消息代理接管，消息代理保证消息传递到指定的目的地。
+消息代理（message broker）和目的地（destination），当消息发送者发送消息以后，将由消息代理接管，消息代理保证消息传递到指定的目的地。
 
 3、消息队列主要的两种形式的目的地
 
@@ -1211,7 +1215,7 @@ public void deleteExchange(){
 }
 ```
 
-## 三、SpringBoot的检索
+## 十一、SpringBoot的检索
 
 ### 1、ElasticSearch简介
 
@@ -1994,11 +1998,11 @@ public void testSearch(){
 }
 ```
 
-## 四、SpringBoot的任务
+## 十二、SpringBoot的任务
 
-## 五、SpringBoot的安全
+## 十三、SpringBoot的安全
 
-## 六、SpringBoot的分布式
+## 十四、SpringBoot的分布式
 
 ### 1、Dubbo简介
 
@@ -2373,6 +2377,8 @@ public class ConsumerUserApplication {
 
 访问是以负载均衡的方式，所以每次都是 8001 。8002.轮询访问
 
+## 十五、Spring Boot与开发热部署
 
 
-## 七、SpringBoot的监管
+
+## 十六、SpringBoot的监管
