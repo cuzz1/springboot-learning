@@ -839,31 +839,31 @@ Exchange的4中类型：direct【默认】点对点，fanout,topic和headers, �
 
 **Connection**:网络连接，例如TCP连接
 
-Channel:信道，多路复用连接中的一条独立的双向数据流通道，信道是建立在真是的TCP链接之内的虚拟连接AMQP命令都是通过信道发送出去的。不管是发布消息，订阅队列还是接受消息，都是信道，减少TCP的开销，复用一条TCP连接。
+**Channel**:信道，多路复用连接中的一条独立的双向数据流通道，信道是建立在真是的TCP链接之内的虚拟连接AMQP命令都是通过信道发送出去的。不管是发布消息，订阅队列还是接受消息，都是信道，减少TCP的开销，复用一条TCP连接。
 
 **Consumer**:消息的消费者，表示一个从消息队列中取得消息的客户端的 应用程序
 
-**VirtualHost**:小型的rabbitMQ,相互隔离
+**VirtualHost**:虚拟主机，表示一批交换器、消息队列和相关对象。虚拟主机是共享相同的身份认证和加密环境的独立服务器域。每个 vhost 本质上就是一个 mini 版的 RabbitMQ 服务器，拥有自己的队列、交换器、绑定和权限机制。vhost 是 AMQP 概念的基础，必须在连接时指定，RabbitMQ 默认的 vhost 是 / 。 
 
 **Broker**:表示消息队列 服务实体
 
-![13.RabbitMQ结构](/images2/13.RabbitMQ结构.png)
+![1538017074040](/images2/1538017074040.png)
 
 
 
 #### 2、RabbitMQ的运行机制
 
-Exchange的三种方式 
+Exchange分发消息时根据类型的不同分发策略有区别，目前共四种类型：direct、fanout、topic、headers 。headers 匹配 AMQP 消息的 header 而不是路由键， headers 交换器和 direct 交换器完全一致，但性能差很多，目前几乎用不到了，所以直接看另外三种类型： 
 
-direct：根据路由键直接匹配，一对一
+**direct**：根据路由键直接匹配，一对一
 
 ![14.RabbitMQDirect](/images2/14.RabbitMQDirect.png)
 
-fanout:不经过路由键，直接发送到每一个队列
+**fanout**：不经过路由键，直接发送到每一个队列
 
 ![14.RabbitMQfaout](/images2/14.RabbitMQfaout.png)
 
-topic:类似模糊匹配的根据路由键，来分配绑定的队列
+**topic**：类似模糊匹配的根据路由键，来分配绑定的队列
 
 ![14.RabbitMQtopic](/images2/14.RabbitMQtopic.png)
 
@@ -878,11 +878,11 @@ topic:类似模糊匹配的根据路由键，来分配绑定的队列
 docker pull registry.docker-cn.com/library/rabbitmq:3-management
 [root@node1 ~]# docker images
 REPOSITORY                                     TAG                 IMAGE ID            CREATED             SIZE
-registry.docker-cn.com/library/rabbitmq        3-management        c51d1c73d028        11 days ago         149 MB
+registry.docker-cn.com/library/rabbitmq        3-management        e1a73233e3be        11 days ago         149 MB
 #2.运行rabbitmq
 ##### 端口：5672 客户端和rabbitmq通信 15672：管理界面的web页面
 
-docker run -d -p 5672:5672 -p 15672:15672 --name myrabbitmq c51d1c73d028
+docker run -d -p 5672:5672 -p 15672:15672 --name myrabbitmq e1a73233e3be
 
 #3.查看运行
 docker ps
@@ -890,7 +890,7 @@ docker ps
 
 2、打开网页客户端并登陆，账号【guest】,密码【guest】，登陆
 
-![13.rabbitmq](/images2/13.rabbitmq.jpg)
+![13.rabbitmq](/images2/1538025981287.png)
 
 
 
@@ -900,23 +900,23 @@ docker ps
 
 ![15.exchanges](/images2/15.exchanges.jpg)
 
-2）、添加 Queues,分别添加**lxy.news、wdjr、wdjr.emps、wdjr.news**
+2）、添加 Queues,分别添加**cuzz.news、cuzz、cuzz.emps、cuxx.news**
 
-![16.queues](/images2/16.queues.jpg)
+![16.queues](/images2/1538026463893.png)
 
 3）、点击【exchange.direct】添加绑定规则
 
-![17.bind](/images2/17.bind.jpg)
+![17.bind](/images2/1538026685431.png)
 
 
 
 4）、点击【exchange.fanout】添加绑定规则
 
-![18,bindfanout](/images2/18,bindfanout.jpg)
+![18,bindfanout](/images2/1538026888673.png)
 
 5）、点击【exchange.topic】添加绑定规则
 
-![19,bind_topic](/images2/19,bind_topic.jpg)
+![19,bind_topic](/images2/1538027064701.png)
 
 
 
@@ -928,51 +928,45 @@ docker ps
 
 【direct】发布命令，点击 Publish message
 
-![20.publish-direct](/images2/20.publish-direct.jpg)
+![20.publish-direct](/images2/1538027184098.png)
 
 查看队列的数量
 
-![21.queue-direct](/images2/21.queue-direct.jpg)
+![21.queue-direct](/images2/1538027253860.png)
 
-点击查看发送的信息
+点击查看发送的信息，点击Get Message
 
-![22.msg-direct](/images2/22.msg-direct.jpg)
+![1538027361895](/images2/1538027361895.png)
 
 【fanout】的发布消息
 
-![23.pub-fanout](/images2/23.pub-fanout.jpg)
+![23.pub-fanout](/images2/1538027504700.png)
 
-队列信息
+队列信息，每个队列都添加了一条
 
-![24.queue-fanout](/images2/24.queue-fanout.jpg)
+![24.queue-fanout](/images2/1538027617120.png)
 
 
-
-随意一个数据信息例如：wdjr.emp
-
-![25.msg-fanout](/images2/25.msg-fanout.jpg)
 
 【topic】发布信息测试
 
-![26.pub-topic](/images2/26.pub-topic.jpg)
+![26.pub-topic](/images2/1538027814872.png)
 
 队列的值
 
-![27.que-topic](/images2/27.que-topic.jpg)
+![27.que-topic](/images2/1538028010175.png)
+
+`cuzz.news`可以匹配`cuzz.#`也可以匹配`*.news`所以都能匹配到
 
 信息查看
 
-![28.msg-topic](/images2/28.msg-topic.jpg)
-
 #### 4、创建工程整合
 
-```java
-1、RabbitAutoConfiguration
-2、自动配置了连接工厂 ConnectionFactory
-3、RabbitProperties封装了 RabbitMQ
-4、RabbitTemplate:给RabbitMQ发送和接受消息的
-5、AmqpAdmin：RabbitMQ的系统管理功能组件
-```
+> 1、RabbitAutoConfiguration
+> 2、自动配置了连接工厂 ConnectionFactory
+> 3、RabbitProperties封装了 RabbitMQ
+> 4、RabbitTemplate:给RabbitMQ发送和接受消息的
+> 5、AmqpAdmin：RabbitMQ的系统管理功能组件
 
 ##### 1、RabbitTemplate
 
@@ -985,7 +979,7 @@ docker ps
 ```yaml
 spring:
   rabbitmq:
-    host: 192.168.179.131
+    host: 10.138.223.126
     port: 5672
     username: guest
     password: guest
@@ -994,103 +988,86 @@ spring:
 4、编写测试类,将HashMap写入Queue
 
 ```java
- @Autowired
-    RabbitTemplate rabbitTemplate;
-
-    @Test
-    public void contextLoads() {
-        //Message需要自己构建一个；定义消息体内容和消息头
-        // rabbitTemplate.send(exchange, routingKey, message);
-        //Object 默认当成消息体，只需要传入要发送的对象，自动化序列发送给rabbitmq；
-        Map<String,Object> map = new HashMap<>();
-        map.put("msg", "这是第一个信息");
-        map.put("data", Arrays.asList("helloWorld",123,true));
-        //对象被默认序列以后发送出去
-        rabbitTemplate.convertAndSend("exchange.direct","wdjr.news",map);
-    }
+	@Test
+	public void contextLoads() {
+		// Message需要自己构建一个；定义消息体内容和消息头
+		// rabbitTemplate.send(exchange, routingKey, message);
+		// Object 默认当成消息体，只需要传入要发送的对象，自动化序列发送给rabbitmq；
+		Map<String,Object> map = new HashMap<>();
+		map.put("msg", "这是第一个信息");
+		map.put("data", Arrays.asList("HelloWorld", 123, true));
+		//对象被默认序列以后发送出去
+		rabbitTemplate.convertAndSend("exchange.direct","cuzz.news",map);
+	}
 ```
 
-5、查看网页的信息
+5、查看网页的信息，默认使用java序列的方式
 
-![29.dir-idea](/images2/29.dir-idea.jpg)
+![29.dir-idea](/images2/1538028600301.png)
 
 6、取出队列的值
 
 > 取出队列中数据就没了
 
 ```java
-@Test
-public void reciverAndConvert(){
-
-    Object o = rabbitTemplate.receiveAndConvert("wdjr.news");
-    System.out.println(o.getClass());
-    System.out.println(o);
-
-}
+	@Test
+	public void receiveAndConvert(){
+		Object o = rabbitTemplate.receiveAndConvert("cuzz.news");
+		System.out.println(o.getClass());
+		System.out.println(o);
+	}
 ```
 
 结果
 
 ```
 class java.util.HashMap
-{msg=这是第一个信息, data=[helloWorld, 123, true]}
+{msg=这是第一个信息, data=[HelloWorld, 123, true]}
 ```
 
 7、使用Json方式传递，并传入对象Book
 
-1）、MyAMQPConfig
+1）、MyAMQPConfig，自定义一个MessageConverter返回Jackson2JsonMessageConverter
 
 ```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/27 14:16
+ * @Description:
+ */
 @Configuration
-public class MyAMQPConfig  {
+public class MyAMQPConfig {
 
     @Bean
-    public MessageConverter messageConverter(){
+    public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 }
 ```
 
+发现已经转化为json了
+
+![1538029298810](/images2/1538029298810.png)
+
 2）、编写Book实体类
 
 ```java
-package com.wdjr.amqp.bean;
-
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/27 14:22
+ * @Description:
+ */
+@Data
 public class Book {
     private String  bookName;
     private String author;
 
     public Book(){
-
     }
 
     public Book(String bookName, String author) {
         this.bookName = bookName;
         this.author = author;
-    }
-
-    public String getBookName() {
-        return bookName;
-    }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "bookName='" + bookName + '\'' +
-                ", author='" + author + '\'' +
-                '}';
     }
 }
 ```
@@ -1099,22 +1076,20 @@ public class Book {
 
 ```java
 @Test
-public void contextLoads() {
-    //对象被默认序列以后发送出去
-    rabbitTemplate.convertAndSend("exchange.direct","wdjr.news",new Book("百年孤独", "季羡林"));
+public void test() {
+    // 对象被默认序列以后发送出去
+    rabbitTemplate.convertAndSend("exchange.direct","cuzz.news", new Book("Effect java", "Joshua Bloch"));
 }
 ```
 
-4）、查看wdjr.news
-
-![30.dir-idea-json](/images2/30.dir-idea-json.jpg)
+4）、查看cuzz.news
 
 5）、取出数据
 
 ```java
 @Test
 public void reciverAndConvert(){
-    Object o = rabbitTemplate.receiveAndConvert("wdjr.news");
+    Object o = rabbitTemplate.receiveAndConvert("cuzz.news");
     System.out.println(o.getClass());
     System.out.println(o);
 }
@@ -1123,8 +1098,8 @@ public void reciverAndConvert(){
 6）、结果演示
 
 ```
-class com.wdjr.amqp.bean.Book
-Book{bookName='百年孤独', author='季羡林'}
+class com.cuzz.amqp.bean.Book
+Book(bookName=Effect java, author=Joshua Bloch)
 ```
 
 ##### 2、开启基于注解的方式
@@ -1134,12 +1109,12 @@ Book{bookName='百年孤独', author='季羡林'}
 ```java
 @Service
 public class BookService {
-    @RabbitListener(queues = "wdjr.news")
+    @RabbitListener(queues = "cuzz.news")
     public void receive(Book book){
         System.out.println(book);
     }
 
-    @RabbitListener(queues = "wdjr")
+    @RabbitListener(queues = "cuzz")
     public void receive02(Message message){
         System.out.println(message.getBody());
         System.out.println(message.getMessageProperties());
@@ -1150,13 +1125,13 @@ public class BookService {
 2、主程序开启RabbitMQ的注解
 
 ```java
-@EnableRabbit //开启基于注解的rabbitmq
+@EnableRabbit // 开启基于注解的rabbitmq
 @SpringBootApplication
-public class AmqpApplication {
+public class Springboot10AmqpApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AmqpApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(Springboot10AmqpApplication.class, args);
+	}
 }
 ```
 
@@ -1219,7 +1194,7 @@ public void deleteExchange(){
 
 ### 1、ElasticSearch简介
 
-​          ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于[云计算](https://baike.baidu.com/item/%E4%BA%91%E8%AE%A1%E7%AE%97)中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。 
+​ ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于[云计算](https://baike.baidu.com/item/%E4%BA%91%E8%AE%A1%E7%AE%97)中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。 
 
 ### 2、ElasticSearch的安装
 

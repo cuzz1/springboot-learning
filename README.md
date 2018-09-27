@@ -21,6 +21,6 @@
 
 ## 视频和资料
 - 可以去尚硅谷的官网获取
-- B站上也有[视频](https://www.bilibili.com/video/av23478787)，源代码和软件，下载地址：[百度云](https://pan.baidu.com/s/1mWz3z886d2Br3Mp6TekPHA) 密码：13nn
-- 推荐提前看看Spring注解驱动开发，下载地址：[百度云](https://pan.baidu.com/s/1ei1mZVrDXrJA67qB_HOC3A) 密码：8oo1，部分笔记：[链接](https://github.com/cuzz1/learn-demo/tree/master/demo-05-spring-annotation)
+- B站上也有[视频](https://www.bilibili.com/video/av23478787)，源代码和软件,下载地址： [百度云](https://pan.baidu.com/s/1mWz3z886d2Br3Mp6TekPHA) 密码：13nn
+- 推荐提前看看Spring注解驱动开发  [百度云](https://pan.baidu.com/s/1ei1mZVrDXrJA67qB_HOC3A) 密码：8oo1，部分笔记：[链接](https://github.com/cuzz1/learn-demo/tree/master/demo-05-spring-annotation)
 
