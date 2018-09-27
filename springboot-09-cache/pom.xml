@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.cuzz</groupId>
-	<artifactId>springboot-07-cache</artifactId>
+	<artifactId>springboot-09-cache</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>springboot-07-cache</name>
+	<name>springboot-09-cache</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
