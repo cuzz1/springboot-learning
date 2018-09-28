@@ -1956,6 +1956,72 @@ public void testSearch(){
 
 ## 十二、SpringBoot的任务
 
+### 1、异步任务
+
+先开启异步注解，添加@EnableAsync
+
+```java
+@EnableAsync
+@SpringBootApplication
+public class Springboot12TaskApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Springboot12TaskApplication.class, args);
+	}
+}
+```
+
+service，在方法上添加@Async
+
+```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/28 17:49
+ * @Description:
+ */
+@Service
+public class AsynSerivce {
+    
+    @Async
+    public void hello() {
+        try {
+            Thread.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("处理数据中...");
+    }
+}
+```
+
+controller
+
+```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/28 17:51
+ * @Description:
+ */
+@RestController
+public class AsynController {
+
+    @Autowired
+    AsynSerivce asynSerivce;
+
+    @GetMapping("/hello")
+    public String hello() {
+        asynSerivce.hello();
+        return "success";
+    }
+}
+```
+
+发现不会堵塞在这里，而是先返回success，异步处理hello请求
+
+### 2、定时任务
+
+### 3、邮件任务
+
 ## 十三、SpringBoot的安全
 
 ## 十四、SpringBoot的分布式
