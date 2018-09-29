@@ -2020,7 +2020,140 @@ public class AsynController {
 
 ### 2、定时任务
 
+项目开发中经常需要执行一些定时任务，比如需要在每天凌晨时候，分析一次前一天的日志信息。Spring为我们提供了异步执行任务调度的方式，提供TaskExecutor 、TaskScheduler 接口。  
+
+cron表达式：
+
+| 字段 | 允许值                  | 允许的特殊字符    |
+| :--- | :---------------------- | :---------------- |
+| 秒   | 0-59                    | , -   * /         |
+| 分   | 0-59                    | , -   * /         |
+| 小时 | 0-23                    | , -   * /         |
+| 日期 | 1-31                    | , -   * ? / L W C |
+| 月份 | 1-12                    | , -   * /         |
+| 星期 | 0-7或SUN-SAT   0,7是SUN | , -   * ? / L C # |
+
+含义：
+
+| 特殊字符 | 代表含义                   |
+| -------- | -------------------------- |
+| ,        | 枚举                       |
+| -        | 区间                       |
+| *        | 任意                       |
+| /        | 步长                       |
+| ?        | 日/星期冲突匹配            |
+| L        | 最后                       |
+| W        | 工作日                     |
+| C        | 和calendar联系后计算过的值 |
+| #        | 星期，4#2，第2个星期四     |
+
+主要有@Scheduled注解，cron()方法
+
+```java
+public @interface Scheduled {
+
+	/**
+	 * A cron-like expression, extending the usual UN*X definition to include triggers
+	 * on the second as well as minute, hour, day of month, month and day of week.
+	 * <p>E.g. {@code "0 * * * * MON-FRI"} means once per minute on weekdays
+	 * (at the top of the minute - the 0th second).
+	 * @return an expression that can be parsed to a cron schedule
+	 * @see org.springframework.scheduling.support.CronSequenceGenerator
+	 */
+	String cron() default "";
+}
+```
+
+测试类
+
+```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/29 10:25
+ * @Description:
+ */
+@Service
+public class ScheduledService {
+
+    // 表示周一到周六当秒为0时执行一次
+    @Scheduled(cron = "0 * * * * MON-SAT")
+    public void hello() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(new Date());
+        System.out.println(date + "  hello...");
+    }
+}
+```
+
+开启定时任务注解@EnableScheduling
+
+```java
+@EnableAsync
+@EnableScheduling
+@SpringBootApplication
+public class Springboot12TaskApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Springboot12TaskApplication.class, args);
+	}
+}
+```
+
+测试
+
+```
+2018-09-29 10:48:00  hello...
+2018-09-29 10:49:00  hello...
+```
+
+
+
 ### 3、邮件任务
+
+#### 1、邮件发送需要引入spring-boot-starter-mail
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
+
+#### 2、Spring Boot 自动配置MailSenderAutoConfiguration
+
+#### 3、定义MailProperties内容，配置在application.properties中
+
+```properties
+spring.mail.username=214769277@qq.com
+spring.mail.password=xxxxxxxxxxx
+spring.mail.host=smtp.qq.com
+spring.mail.properties.mail.stmp.ssl.enable=true
+```
+
+#### 4、自动装配JavaMailSender
+
+```java
+	@Autowired
+	JavaMailSenderImpl mailSender;
+
+	@Test
+	public void contextLoads() {
+		SimpleMailMessage message = new SimpleMailMessage();
+		
+		message.setSubject("Hello World");
+		message.setText("text");
+		
+		message.setTo("cuzz1234@163.com");
+		message.setFrom("214769277@qq.com");
+		
+		mailSender.send(message);
+		
+	}
+```
+
+
+
+#### 5、测试邮件发送
 
 ## 十三、SpringBoot的安全
 
