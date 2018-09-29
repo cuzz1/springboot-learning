@@ -14,7 +14,7 @@
 | 八、Spring Boot自定义starters | 十六、Spring Boot与监控管理   |
 
 ## 笔记课件
-- [SpringBoot入门笔记](/SpringBoot入门教程.md)
+- [SpringBoot初级笔记](/SpringBoot入门教程.md)
 - [SpringBoot高级笔记](/SpringBoot高级教程.md)
 - [课件一](/supporting/SpringBoot初级.pdf)
 - [课件二](/supporting/SpringBoot高级.pdf)
