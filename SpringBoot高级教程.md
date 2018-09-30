@@ -2151,11 +2151,56 @@ spring.mail.properties.mail.stmp.ssl.enable=true
 	}
 ```
 
-
-
 #### 5、测试邮件发送
 
 ## 十三、SpringBoot的安全
+
+Spring Security是针对Spring项目的安全框架，也是Spring Boot底层安全模块默认的技术选型。他可以实现强大的web安全控制。对于安全控制，我们仅需引入spring-boot-starter-security模块，进行少量的配置，即可实现强大的安全管理。
+
+**几个类：**
+
+- WebSecurityConfigurerAdapter：自定义Security策略
+- AuthenticationManagerBuilder：自定义认证策略
+- @EnableWebSecurity：开启WebSecurity模式
+
+**基本概念：**
+
+- 应用程序的两个主要区域是“认证”和“授权”（或者访问控制）。这两个主要区域是Spring Security 的两个目标。
+- “认证”（Authentication），是建立一个他声明的主体的过程（一个“主体”一般是指用户，设备或一些可以在你的应用程序中执行动作的其他系统）。
+- “授权”（Authorization）指确定一个主体是否允许在你的应用程序执行一个动作的过程。为了抵达需要授权的店，主体的身份已经有认证过程建立。
+- 这个概念是通用的而不只在Spring Security中
+
+**步骤：**
+
+- 引入SpringSecurity
+
+  ```xml
+  <dependency>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+  </dependency>
+  ```
+
+- [官方文档](https://docs.spring.io/spring-security/site/docs/current/guides/html5/helloworld-boot.html)
+
+- 编写SpringSecurity配置了
+
+**流程：**
+
+- 登陆/注销
+  - HttpSecurity配置登陆、注销功能
+- Thymeleaf提供的SpringSecurity标签支持
+  - 需要引入thymeleaf-extras-springsecurity4
+  - sec:authentication=“name”获得当前用户的用户名
+  - sec:authorize=“hasRole(‘ADMIN’)”当前用户必须拥有ADMIN权限时才会显示标签内容
+- remember me
+  - 表单添加remember-me的checkbox
+  - 配置启用remember-me功能
+- CSRF（Cross-site request forgery）跨站请求伪造
+  - HttpSecurity启用csrf功能，会为表单添加
+  - csrf的值，提交携带来预防CSRF
+
+
 
 ## 十四、SpringBoot的分布式
 
@@ -2237,30 +2282,36 @@ public interface TicketService {
 ```
 
 ```java
+package com.cuzz.ticket.service;
+
 import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.stereotype.Component;
+
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/30 12:28
+ * @Description:
+ */
 @Component
-//是dubbo包下的service
-@Service
-public class TicketServiceImp implements TicketService {
+@Service // 这个是dubbo @Service
+public class TicketServiceImpl implements TicketService{
+
     @Override
     public String getTicket() {
-        return "《厉害了，我的国》";
+        return "《大话西游》";
     }
 }
 ```
 
-3）、配置文件application.yml
+3）、配置文件application.xml
 
-```yml
-dubbo:
-  application:
-    name: provider-ticket
-  registry:
-    address: zookeeper://192.168.179.131:2111
-  scan:
-    base-packages: com.wdjr.ticket.service
-server:
-  port: 9001
+```xml
+# 名称
+dubbo.application.name=provider-ticket
+# 地址
+dubbo.registry.address=zookeeper://10.138.223.126:2181
+# 扫描哪些包
+dubbo.scan.base-packages=com.cuzz.ticket.service
 ```
 
 4）、启动服务提供者
@@ -2285,16 +2336,20 @@ server:
 
 2）、新建一个service.userService,并将TicketService的接口调用过来【全类名相同-包相同】
 
-![03.dubbo2](/images2/03.dubbo2.jpg)
+
 
 ```java
-package com.wdjr.user.service;
+package com.cuzz.user.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.wdjr.ticket.service.TicketService;
-
+import com.cuzz.ticket.service.TicketService;
 import org.springframework.stereotype.Service;
 
+/**
+ * @Author: cuzz
+ * @Date: 2018/9/30 12:32
+ * @Description:
+ */
 @Service
 public class UserService {
 
@@ -2308,14 +2363,13 @@ public class UserService {
 }
 ```
 
-3）、配置文件application.yml
+3）、配置文件application.xml
 
-```yaml
-dubbo:
-  application:
-    name: comsumer-user
-  registry:
-    address: zookeeper://192.168.179.131:2111
+```xml
+# 名称
+dubbo.application.name=consumer-user
+# 地址
+dubbo.registry.address=zookeeper://10.138.223.126:2181
 ```
 
 4）、编写测试类测试
@@ -2333,7 +2387,7 @@ public void contextLoads() {
 
 结果展示：
 
-![04.dubbo+zk3](/images2/04.dubbo+zk3.jpg)
+![1538283974802](E:\project\springboot-learning\images2\1538283974802.png)
 
 
 
