@@ -2157,20 +2157,20 @@ spring.mail.properties.mail.stmp.ssl.enable=true
 
 Spring Security是针对Spring项目的安全框架，也是Spring Boot底层安全模块默认的技术选型。他可以实现强大的web安全控制。对于安全控制，我们仅需引入spring-boot-starter-security模块，进行少量的配置，即可实现强大的安全管理。
 
-**几个类：**
+### 1、几个类
 
 - WebSecurityConfigurerAdapter：自定义Security策略
 - AuthenticationManagerBuilder：自定义认证策略
 - @EnableWebSecurity：开启WebSecurity模式
 
-**基本概念：**
+### 2、基本概念
 
 - 应用程序的两个主要区域是“认证”和“授权”（或者访问控制）。这两个主要区域是Spring Security 的两个目标。
 - “认证”（Authentication），是建立一个他声明的主体的过程（一个“主体”一般是指用户，设备或一些可以在你的应用程序中执行动作的其他系统）。
 - “授权”（Authorization）指确定一个主体是否允许在你的应用程序执行一个动作的过程。为了抵达需要授权的店，主体的身份已经有认证过程建立。
 - 这个概念是通用的而不只在Spring Security中
 
-**步骤：**
+### 3、步骤
 
 - 引入SpringSecurity，由于版本问题，pom文件如下
 
@@ -2243,6 +2243,8 @@ Spring Security是针对Spring项目的安全框架，也是Spring Boot底层安
 
 - [官方文档](https://docs.spring.io/spring-security/site/docs/current/guides/html5/helloworld-boot.html)
 
+- [页面文件下载](/supporting/SpringSecurity实验)
+
 - application.properties，刚登入需要设置密码
 
   ```properties
@@ -2255,7 +2257,89 @@ Spring Security是针对Spring项目的安全框架，也是Spring Boot底层安
 
 - 编写SpringSecurity配置了
 
-**流程：**
+  ```java
+  /**
+   * @Author: cuzz
+   * @Date: 2018/9/29 12:51
+   * @Description:
+   */
+  @EnableWebSecurity
+  public class MySecurityConfig extends WebSecurityConfigurerAdapter{
+      @Override
+      protected void configure(HttpSecurity http) throws Exception {
+          // super.configure(http);
+          // 定制请求的授权规则
+          http.authorizeRequests().antMatchers("/").permitAll()
+                  .antMatchers("/level1/**").hasRole("VIP1")
+                  .antMatchers("/level2/**").hasRole("VIP2")
+                  .antMatchers("/level3/**").hasRole("VIP3");
+      }
+  }
+  ```
+
+  发现现在只能访问首页，其他页面拒接访问
+
+- 自定义角色
+
+  ```
+  @EnableWebSecurity
+  public class MySecurityConfig extends WebSecurityConfigurerAdapter{
+  
+  
+      @Override
+      protected void configure(HttpSecurity http) throws Exception {
+          // super.configure(http);
+          // 定制请求的授权规则
+          http.authorizeRequests().antMatchers("/").permitAll()
+                  .antMatchers("/level1/**").hasRole("VIP1")
+                  .antMatchers("/level2/**").hasRole("VIP2")
+                  .antMatchers("/level3/**").hasRole("VIP3");
+          // 开启登入功能，如果权限就来到登入页面
+          http.formLogin();
+      }
+  
+      // 定义认证规则
+      @Override
+      protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+          // super.configure(auth);
+          auth.inMemoryAuthentication()
+                  .withUser("cuzz").password("123456").roles("VIP1","VIP2")
+                  .and()
+                  .withUser("cuxx").password("123456").roles("VIP3");
+      }
+  
+  }
+  ```
+
+- 开启注销功能
+
+  ```java
+      @Override
+      protected void configure(HttpSecurity http) throws Exception {
+          // super.configure(http);
+          // 定制请求的授权规则
+          http.authorizeRequests().antMatchers("/").permitAll()
+                  .antMatchers("/level1/**").hasRole("VIP1")
+                  .antMatchers("/level2/**").hasRole("VIP2")
+                  .antMatchers("/level3/**").hasRole("VIP3");
+          // 开启登入功能，如果权限就来到登入页面
+          http.formLogin();
+          // 开启注销功能,成功注销后回到首页
+          http.logout().logoutSuccessUrl("/");
+      }
+  ```
+
+  在页面添加
+
+  ```html
+  <form th:action="@{/logout}" method="post">
+      <input type="submit" value="注销"/>
+  </form>
+  ```
+
+  
+
+### 4、流程
 
 - 登陆/注销
   - HttpSecurity配置登陆、注销功能
