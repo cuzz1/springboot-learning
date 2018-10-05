@@ -2172,16 +2172,86 @@ Spring Security是针对Spring项目的安全框架，也是Spring Boot底层安
 
 **步骤：**
 
-- 引入SpringSecurity
+- 引入SpringSecurity，由于版本问题，pom文件如下
 
   ```xml
-  <dependency>
-      <groupId>org.mybatis.spring.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
-  </dependency>
+  <?xml version="1.0" encoding="UTF-8"?>
+  <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  	<modelVersion>4.0.0</modelVersion>
+  
+  	<groupId>com.cuzz</groupId>
+  	<artifactId>springboot-13-security</artifactId>
+  	<version>0.0.1-SNAPSHOT</version>
+  	<packaging>jar</packaging>
+  
+  	<name>springboot-13-security</name>
+  	<description>Demo project for Spring Boot</description>
+  	<parent>
+  		<groupId>org.springframework.boot</groupId>
+  		<artifactId>spring-boot-starter-parent</artifactId>
+  		<version>1.5.12.RELEASE</version>
+  		<relativePath/> <!-- lookup parent from repository -->
+  	</parent>
+  
+  	<properties>
+  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  		<java.version>1.8</java.version>
+  		<thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
+  		<thymeleaf-layout-dialect.version>2.3.0</thymeleaf-layout-dialect.version>
+  		<!--<thymeleaf-extras-springsecurity4.version>3.0.2.RELEASE</thymeleaf-extras-springsecurity4.version>-->
+  	</properties>
+  
+  	<dependencies>
+  		<!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4 -->
+  		<!--<dependency>-->
+  			<!--<groupId>org.thymeleaf.extras</groupId>-->
+  			<!--<artifactId>thymeleaf-extras-springsecurity4</artifactId>-->
+  		<!--</dependency>-->
+  		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-security</artifactId>
+  		</dependency>
+  		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-web</artifactId>
+  		</dependency>
+  
+  		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-test</artifactId>
+  			<scope>test</scope>
+  		</dependency>
+  	</dependencies>
+  
+  	<build>
+  		<plugins>
+  			<plugin>
+  				<groupId>org.springframework.boot</groupId>
+  				<artifactId>spring-boot-maven-plugin</artifactId>
+  			</plugin>
+  		</plugins>
+  	</build>
+  
+  </project>
   ```
 
 - [官方文档](https://docs.spring.io/spring-security/site/docs/current/guides/html5/helloworld-boot.html)
+
+- application.properties，刚登入需要设置密码
+
+  ```properties
+  spring.thymeleaf.prefix=classpath:/templates/
+  spring.thymeleaf.suffix=.html
+  security.user.name=root
+  security.user.password=root
+  security.user.role=ADMIN
+  ```
 
 - 编写SpringSecurity配置了
 

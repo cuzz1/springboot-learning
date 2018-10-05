@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @Controller
 public class KungfuController {
-
     private final String PREFIX = "pages/";
-
     /**
      * 欢迎页
      * @return
@@ -62,4 +60,6 @@ public class KungfuController {
     public String level3(@PathVariable("path")String path) {
         return PREFIX+"level3/"+path;
     }
+
+
 }
