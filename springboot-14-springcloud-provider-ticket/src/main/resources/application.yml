@@ -1,0 +1,11 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: provider-ticket
+eureka:
+  instance:
+    prefer-ip-address: true #注册是服务使用IP地址
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

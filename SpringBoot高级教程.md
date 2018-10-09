@@ -1,6 +1,8 @@
 ---
-
+typora-copy-images-to: images2
 ---
+
+
 
 # SpringBoot的高级教程
 
@@ -2400,7 +2402,7 @@ dubbo就是个服务框架，如果没有分布式的需求，其实是不需要
 #安装zookeeper镜像
 docker pull registry.docker-cn.com/library/zookeeper
 #运行zookeeper
- docker run --name zk01  --restart always -d -p 2111:2181 bf5cbc9d5cac
+ docker run --name zk01  --restart always -d -p 2181:2181 bf5cbc9d5cac
 ```
 
 
@@ -2541,13 +2543,13 @@ public void contextLoads() {
 
 结果展示：
 
-![1538283974802](E:\project\springboot-learning\images2\1538283974802.png)
+![1538283974802](/images2/1538283974802.png)
 
 
 
 ### 4、SpringCloud
 
-SpringCloud是一个分布式的整体解决方案，Spring Cloud为开发者提供了在分布式系统（配置管理，服务器发现，熔断，路由，微代理，控制总线，一次性token,全局锁，leader选举，分布式session，集群状态）中快速构建的工具，使用SpringCloud的开发者可以快速的驱动服务或者构建应用，同时能够和云平台资源进行对接。
+SpringCloud是一个分布式的整体解决方案，Spring Cloud为开发者提供了**在分布式系统（配置管理，服务器发现，熔断，路由，微代理，控制总线，一次性token，全局锁，leader选举，分布式session，集群状态）中快速构建的工具，**使用SpringCloud的开发者可以快速的驱动服务或者构建应用，同时能够和云平台资源进行对接。
 
 
 
@@ -2567,7 +2569,19 @@ SpringCloud是一个分布式的整体解决方案，Spring Cloud为开发者提
 
 注册中心+服务提供者+服务消费者
 
-![05.springCloud](/images2/05.springCloud.jpg)
+创建项目
+
+- eureka-server
+
+![05.springCloud](/images2/1539052417144.png)
+
+- proviser-ticket
+
+![1539053281813](/images2/1539053281813.png)
+
+- consumer-user
+
+![1539053281813](/images2/1539053281813.png)
 
 
 
@@ -2582,24 +2596,26 @@ server:
   port: 8761
 eureka:
   instance:
-    hostname: eureka-server #实例的主机名
+    hostname: eureka-server     #实例的主机名
   client:
     register-with-eureka: false #不把自己注册到euraka上
-    fetch-registry: false #不从euraka上来获取服务的注册信息
+    fetch-registry: false       #不从euraka上来获取服务的注册信息
     service-url:
       defaultZone: http://localhost:8761/eureka/
 ```
 
 3、编写主程序
 
+使用`@EnableEurekaServer`启用注册中心的功能
+
 ```java
 @EnableEurekaServer
 @SpringBootApplication
-public class EurekaServerApplication {
+public class Springboot14SpringcloudEurekaServerApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EurekaServerApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(Springboot14SpringcloudEurekaServerApplication.class, args);
+	}
 }
 ```
 
@@ -2613,12 +2629,10 @@ public class EurekaServerApplication {
 
 ```yaml
 server:
-  port: 8002
+  port: 8001
 spring:
   application:
     name: provider-ticket
-
-
 eureka:
   instance:
     prefer-ip-address: true #注册是服务使用IP地址
@@ -2630,12 +2644,15 @@ eureka:
 3、创建一个售票的service
 
 ```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/10/9 11:02
+ * @Description:
+ */
 @Service
-public class TicketService {
-
-    public String getTicket(){
-        System.out.println("8001");
-        return "《厉害了，我的国》";
+public class TicketSerivce {
+    public String getTicket() {
+        return "《大话西游》";
     }
 }
 ```
@@ -2643,15 +2660,20 @@ public class TicketService {
 4、创建一个用于访问的controller
 
 ```java
+/**
+ * @Author: cuzz
+ * @Date: 2018/10/9 11:04
+ * @Description:
+ */
 @RestController
 public class TicketController {
 
     @Autowired
-    TicketService ticketService;
+    TicketSerivce ticketSerivce;
 
     @GetMapping("/ticket")
-    public String getTicket(){
-        return ticketService.getTicket();
+    public String getTicket() {
+        return ticketSerivce.getTicket();
     }
 }
 ```
@@ -2671,7 +2693,7 @@ spring:
   application:
     name: consumer-user
 server:
-  port: 9001
+  port: 8200
 eureka:
   instance:
     prefer-ip-address: true
@@ -2699,20 +2721,19 @@ public class UserController {
 4、编写主程序
 
 ```java
-@EnableDiscoveryClient //开启发现服务功能
+@EnableDiscoveryClient  // 开启发现服务
 @SpringBootApplication
-public class ConsumerUserApplication {
+public class Springboot14SpringcloudConsumerUserApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ConsumerUserApplication.class, args);
+	public static void main(String[] args) {
+		SpringApplication.run(Springboot14SpringcloudConsumerUserApplication.class, args);
+	}
 
-    }
-
-    @LoadBalanced //使用负载均衡机制
-    @Bean
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
+	@LoadBalanced //使用负载均衡机制
+	@Bean
+	public RestTemplate restTemplate(){
+		return new RestTemplate();
+	}
 }
 ```
 
@@ -2722,23 +2743,19 @@ public class ConsumerUserApplication {
 
 1、运行Eureka-server，provider-ticket【8002执行】(端口改为8001打成jar包，执行)，consumer-user
 
-![06.EurekaServer](/images2/06.EurekaServer.jpg)
+![06.EurekaServer](/images2/1539057611119.png)
 
 2、provider-ticket
 
 
 
-![07.provider-ticket](/images2/07.provider-ticket.jpg)
-
-![07.provider-ticket](/images2/07.provider-ticket02.jpg)
-
-
+![1539057685865](/images2/1539057685865.png)
 
 3、consumer-user
 
-![08.consumer](/images2/08.consumer.jpg)
+![08.consumer](/images2/1539057816841.png)
 
-访问是以负载均衡的方式，所以每次都是 8001 。8002.轮询访问
+访问是以负载均衡的方式，所以每次都是 8001 。8002.轮询访问S
 
 ## 十五、Spring Boot与开发热部署
 
